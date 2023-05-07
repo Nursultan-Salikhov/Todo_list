@@ -1,6 +1,13 @@
 package service
 
-import "Todo_list/internal/model"
+import (
+	"Todo_list/internal/model"
+	"errors"
+)
+
+var (
+	ErrUnvalidatedData = errors.New("non-validated input data")
+)
 
 type Task interface {
 	Create(task model.Task) (int, error)

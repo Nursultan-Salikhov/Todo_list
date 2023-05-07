@@ -7,6 +7,7 @@ import (
 	"Todo_list/internal/transport/handler"
 	"Todo_list/internal/transport/server"
 	"context"
+	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"

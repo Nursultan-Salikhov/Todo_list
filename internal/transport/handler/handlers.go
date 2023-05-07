@@ -25,7 +25,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 		completed := task.Group("completed")
 		{
-			completed.Group("/", h.getCompletedTasks)
+			completed.GET("/", h.getCompletedTasks)
 		}
 
 		uncompleted := task.Group("uncompleted")

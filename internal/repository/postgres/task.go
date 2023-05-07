@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"Todo_list/internal/model"
+	"fmt"
 	"github.com/jmoiron/sqlx"
 )
 
@@ -14,8 +15,16 @@ func NewTask(db *sqlx.DB) *Task {
 }
 
 func (t *Task) Create(task model.Task) (int, error) {
-	//TODO implement me
-	panic("implement me")
+
+	var id int
+	query := fmt.Sprintf("INSERT INTO %s (name, done) VALUES ($1, $2) RETURNING id", taskTable)
+	row := t.db.QueryRow(query, task.Name, task.Done)
+	err := row.Scan(&id)
+	if err != nil {
+		return 0, err
+	}
+
+	return id, nil
 }
 
 func (t *Task) GetAll() ([]*model.Task, error) {

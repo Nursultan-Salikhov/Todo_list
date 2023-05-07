@@ -14,8 +14,7 @@ func NewTaskService(repo *repository.Repository) *TaskService {
 }
 
 func (t *TaskService) Create(task model.Task) (int, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.repo.Create(task)
 }
 
 func (t *TaskService) GetAll() ([]*model.Task, error) {
