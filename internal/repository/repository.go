@@ -1,6 +1,13 @@
 package repository
 
-import "Todo_list/internal/model"
+import (
+	"Todo_list/internal/model"
+	"errors"
+)
+
+var (
+	ErrDataNotFound = errors.New("data not found")
+)
 
 type Task interface {
 	Create(task model.Task) (int, error)

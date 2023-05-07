@@ -14,6 +14,11 @@ func NewTaskService(repo *repository.Repository) *TaskService {
 }
 
 func (t *TaskService) Create(task model.Task) (int, error) {
+	err := task.Validate()
+	if err != nil {
+		return 0, ErrUnvalidatedData
+	}
+
 	return t.repo.Create(task)
 }
 
@@ -22,21 +27,32 @@ func (t *TaskService) GetAll() ([]model.Task, error) {
 }
 
 func (t *TaskService) GetCompleted() ([]model.Task, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.repo.GetCompleted()
 }
 
 func (t *TaskService) GetUncompleted() ([]model.Task, error) {
-	//TODO implement me
-	panic("implement me")
+	return t.repo.GetUncompleted()
 }
 
 func (t *TaskService) Update(taskId int, updateTask model.UpdateTask) error {
-	//TODO implement me
-	panic("implement me")
+	err := updateTask.Validate()
+	if err != nil {
+		return ErrUnvalidatedData
+	}
+
+	err = t.repo.Update(taskId, updateTask)
+	if err == repository.ErrDataNotFound {
+		return ErrUnvalidatedData
+	}
+
+	return err
 }
 
 func (t *TaskService) Delete(taskId int) error {
-	//TODO implement me
-	panic("implement me")
+	err := t.repo.Delete(taskId)
+	if err == repository.ErrDataNotFound {
+		return ErrUnvalidatedData
+	}
+
+	return err
 }
