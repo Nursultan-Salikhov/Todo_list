@@ -14,3 +14,7 @@ type Task interface {
 type Service struct {
 	Task
 }
+
+func NewService(task Task) *Service {
+	return &Service{Task: task}
+}
