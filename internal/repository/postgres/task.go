@@ -27,17 +27,24 @@ func (t *Task) Create(task model.Task) (int, error) {
 	return id, nil
 }
 
-func (t *Task) GetAll() ([]*model.Task, error) {
+func (t *Task) GetAll() ([]model.Task, error) {
+	var res []model.Task
+
+	query := fmt.Sprintf("SELECT t.id, t.name, t.done FROM %s t", taskTable)
+	err := t.db.Select(&res, query)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
+}
+
+func (t *Task) GetCompleted() ([]model.Task, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *Task) GetCompleted() ([]*model.Task, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (t *Task) GetUncompleted() ([]*model.Task, error) {
+func (t *Task) GetUncompleted() ([]model.Task, error) {
 	//TODO implement me
 	panic("implement me")
 }

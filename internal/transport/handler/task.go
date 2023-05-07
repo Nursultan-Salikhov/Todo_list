@@ -2,7 +2,6 @@ package handler
 
 import (
 	"Todo_list/internal/model"
-	"Todo_list/internal/service"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -17,19 +16,22 @@ func (h *Handler) createTask(c *gin.Context) {
 
 	id, err := h.service.Task.Create(input)
 	if err != nil {
-		statusCode := http.StatusInternalServerError
-		if err == service.ErrUnvalidatedData {
-			statusCode = http.StatusBadRequest
-		}
-
-		newErrorResponse(c, statusCode, err.Error())
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 
-	c.JSONP(http.StatusOK, gin.H{"id": id})
+	c.JSON(http.StatusOK, gin.H{"id": id})
 }
 
-func (h *Handler) getAllTasks(c *gin.Context) {}
+func (h *Handler) getAllTasks(c *gin.Context) {
+	tasks, err := h.service.Task.GetAll()
+	if err != nil {
+		newErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	c.JSON(http.StatusOK, tasks)
+}
 
 func (h *Handler) getCompletedTasks(c *gin.Context) {}
 

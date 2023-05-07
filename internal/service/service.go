@@ -11,9 +11,9 @@ var (
 
 type Task interface {
 	Create(task model.Task) (int, error)
-	GetAll() ([]*model.Task, error)
-	GetCompleted() ([]*model.Task, error)
-	GetUncompleted() ([]*model.Task, error)
+	GetAll() ([]model.Task, error)
+	GetCompleted() ([]model.Task, error)
+	GetUncompleted() ([]model.Task, error)
 	Update(taskId int, updateTask model.UpdateTask) error
 	Delete(taskId int) error
 }

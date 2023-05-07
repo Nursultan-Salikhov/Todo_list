@@ -17,17 +17,16 @@ func (t *TaskService) Create(task model.Task) (int, error) {
 	return t.repo.Create(task)
 }
 
-func (t *TaskService) GetAll() ([]*model.Task, error) {
+func (t *TaskService) GetAll() ([]model.Task, error) {
+	return t.repo.GetAll()
+}
+
+func (t *TaskService) GetCompleted() ([]model.Task, error) {
 	//TODO implement me
 	panic("implement me")
 }
 
-func (t *TaskService) GetCompleted() ([]*model.Task, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func (t *TaskService) GetUncompleted() ([]*model.Task, error) {
+func (t *TaskService) GetUncompleted() ([]model.Task, error) {
 	//TODO implement me
 	panic("implement me")
 }
