@@ -42,7 +42,7 @@ func (t *TaskService) Update(taskId int, updateTask model.UpdateTask) error {
 
 	err = t.repo.Update(taskId, updateTask)
 	if err == repository.ErrDataNotFound {
-		return ErrUnvalidatedData
+		return ErrNotFound
 	}
 
 	return err
@@ -51,7 +51,7 @@ func (t *TaskService) Update(taskId int, updateTask model.UpdateTask) error {
 func (t *TaskService) Delete(taskId int) error {
 	err := t.repo.Delete(taskId)
 	if err == repository.ErrDataNotFound {
-		return ErrUnvalidatedData
+		return ErrNotFound
 	}
 
 	return err

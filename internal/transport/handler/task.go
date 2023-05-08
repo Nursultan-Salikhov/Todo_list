@@ -77,8 +77,13 @@ func (h *Handler) updateTask(c *gin.Context) {
 	err = h.service.Task.Update(taskId, input)
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err == service.ErrUnvalidatedData {
+
+		switch err {
+		case service.ErrUnvalidatedData:
 			statusCode = http.StatusBadRequest
+
+		case service.ErrNotFound:
+			statusCode = http.StatusNotFound
 		}
 
 		newErrorResponse(c, statusCode, err.Error())
@@ -98,8 +103,8 @@ func (h *Handler) deleteTask(c *gin.Context) {
 	err = h.service.Task.Delete(taskId)
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err == service.ErrUnvalidatedData {
-			statusCode = http.StatusBadRequest
+		if err == service.ErrNotFound {
+			statusCode = http.StatusNotFound
 		}
 
 		newErrorResponse(c, statusCode, err.Error())

@@ -7,6 +7,7 @@ import (
 
 var (
 	ErrUnvalidatedData = errors.New("non-validated input data")
+	ErrNotFound        = errors.New("task not found")
 )
 
 type Task interface {

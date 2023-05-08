@@ -1,6 +1,7 @@
 .idea
 .code
 .git
+.Postman
 README.md
 Dockerfile
 Makefile
