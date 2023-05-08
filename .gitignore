@@ -6,6 +6,7 @@
 *.dylib
 .code/
 .idea/
+.database
 
 # Test binary, built with `go test -c`
 *.test

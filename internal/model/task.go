@@ -2,7 +2,7 @@ package model
 
 import "fmt"
 
-const maxNameLen = 10
+const maxNameLen = 1000
 
 type Task struct {
 	Id   int    `json:"id" db:"id"`
