@@ -9,6 +9,26 @@
 	"item": [
 		{
 			"name": "Create Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"var jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"taskId\", jsonData.id);\r",
+							"var unknownTaskId = jsonData.id;\r",
+							"unknownTaskId++;\r",
+							"pm.collectionVariables.set(\"unknownTaskId\", unknownTaskId);\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "POST",
 				"header": [],
@@ -35,6 +55,25 @@
 		},
 		{
 			"name": "Get All Tasks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Task saving\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    var id = pm.collectionVariables.get(\"taskId\");\r",
+							"    pm.expect(jsonData[0].id).to.eql(id);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -51,7 +90,141 @@
 			"response": []
 		},
 		{
+			"name": "Get Uncompleted Tasks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Uncompleted task\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].done).to.eql(false);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{socket}}/task/uncompleted",
+					"host": [
+						"{{socket}}"
+					],
+					"path": [
+						"task",
+						"uncompleted"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"done\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{socket}}/task/{{taskId}}",
+					"host": [
+						"{{socket}}"
+					],
+					"path": [
+						"task",
+						"{{taskId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Task (Unknown)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"done\": true\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{socket}}/task/{{unknownTaskId}}",
+					"host": [
+						"{{socket}}"
+					],
+					"path": [
+						"task",
+						"{{unknownTaskId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "Get Completed Tasks",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Completed task\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData[0].done).to.eql(true);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Status code is 200\", function () {\r",
+							"        pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "GET",
 				"header": [],
@@ -69,35 +242,35 @@
 			"response": []
 		},
 		{
-			"name": "Get Uncompleted Tasks",
+			"name": "Delete Task (Unknown)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {\r",
+							"    pm.response.to.have.status(404);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
-				"method": "GET",
-				"header": []
-			},
-			"response": []
-		},
-		{
-			"name": "Update Task",
-			"request": {
-				"method": "PUT",
+				"method": "DELETE",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"done\": true\r\n}",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
+					"raw": ""
 				},
 				"url": {
-					"raw": "{{socket}}/task/9",
+					"raw": "{{socket}}/task/{{unknownTaskId}}",
 					"host": [
 						"{{socket}}"
 					],
 					"path": [
 						"task",
-						"9"
+						"{{unknownTaskId}}"
 					]
 				}
 			},
@@ -105,17 +278,34 @@
 		},
 		{
 			"name": "Delete Task",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
 			"request": {
 				"method": "DELETE",
 				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
 				"url": {
-					"raw": "{{socket}}/task/6",
+					"raw": "{{socket}}/task/{{taskId}}",
 					"host": [
 						"{{socket}}"
 					],
 					"path": [
 						"task",
-						"6"
+						"{{taskId}}"
 					]
 				}
 			},
@@ -146,6 +336,15 @@
 		{
 			"key": "socket",
 			"value": "localhost:8000",
+			"type": "string"
+		},
+		{
+			"key": "taskId",
+			"value": ""
+		},
+		{
+			"key": "unknownTaskId",
+			"value": "",
 			"type": "string"
 		}
 	]

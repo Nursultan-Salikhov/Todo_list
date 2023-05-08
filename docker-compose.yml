@@ -16,8 +16,6 @@ services:
   db:
     restart: always
     image: postgres:latest
-    volumes:
-      - ./.database/postgres/data:/var/lib/postgresql/data
     ports:
       - 5438:5432
     healthcheck:
